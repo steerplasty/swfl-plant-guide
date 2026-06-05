@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Southwest Florida Plant Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest:    #1C3A2B;
+    --moss:      #2D5A3D;
+    --fern:      #4A7C59;
+    --sage:      #7BAF8E;
+    --mist:      #C8DDD1;
+    --cream:     #F7F3EC;
+    --parchment: #EDE8DF;
+    --earth:     #8B6F4E;
+    --clay:      #C4855A;
+    --gold:      #D4A847;
+    --rust:      #B84C2E;
+    --ink:       #1A1A18;
+    --charcoal:  #3D3D38;
+    --stone:     #7A7A72;
+    --fog:       #B5B5AC;
+    --white:     #FDFCF8;
+
+    --tag-native-bg:   #D6EDDB; --tag-native-fg:   #1C4A28;
+    --tag-bnn-bg:      #D6E8F5; --tag-bnn-fg:      #0D3D6B;
+    --tag-invasive-bg: #F5D6D6; --tag-invasive-fg: #7A1A1A;
+    --tag-edible-bg:   #F5ECCC; --tag-edible-fg:   #5C3D00;
+    --tag-toxic-bg:    #F5D6D6; --tag-toxic-fg:    #7A1A1A;
+    --tag-petsafe-bg:  #D6EDE0; --tag-petsafe-fg:  #0D4A28;
+    --tag-petcaution-bg:#F5ECCC;--tag-petcaution-fg:#5C3200;
+    --tag-pettox-bg:   #F5D6D6; --tag-pettox-fg:   #7A1A1A;
+    --tag-wild-bg:     #EAD6F5; --tag-wild-fg:     #3D0D6B;
+    --tag-warn-bg:     #FFF3CD; --tag-warn-fg:     #664D00;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--forest);
+    color: var(--white);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--gold);
+  }
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .site-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--white);
+    white-space: nowrap;
+  }
+  .site-title span {
+    color: var(--gold);
+    font-style: italic;
+  }
+  .header-meta {
+    font-size: 12px;
+    color: var(--sage);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .plant-count-badge {
+    background: var(--moss);
+    color: var(--mist);
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    border: 1px solid var(--fern);
+  }
+
+  /* ── HERO FILTER PANEL ── */
+  .filter-panel {
+    background: var(--parchment);
+    border-bottom: 1px solid var(--mist);
+    padding: 24px 32px;
+  }
+  .filter-panel-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .search-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+  .search-wrap {
+    flex: 1;
+    position: relative;
+  }
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--stone);
+    font-size: 16px;
+    pointer-events: none;
+  }
+  .search-input {
+    width: 100%;
+    padding: 11px 16px 11px 42px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    border: 1.5px solid var(--mist);
+    border-radius: 8px;
+    background: var(--white);
+    color: var(--ink);
+    outline: none;
+    transition: border-color .2s;
+  }
+  .search-input:focus { border-color: var(--fern); }
+  .search-input::placeholder { color: var(--fog); }
+  .clear-btn {
+    padding: 10px 18px;
+    background: var(--white);
+    border: 1.5px solid var(--mist);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--stone);
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .clear-btn:hover { border-color: var(--clay); color: var(--clay); }
+
+  .filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .filter-group label {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--stone);
+    margin-bottom: 6px;
+  }
+  .filter-group select {
+    width: 100%;
+    padding: 8px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    border: 1.5px solid var(--mist);
+    border-radius: 6px;
+    background: var(--white);
+    color: var(--ink);
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A7A72' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+    transition: border-color .2s;
+  }
+  .filter-group select:focus { border-color: var(--fern); }
+
+  .results-bar {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 14px 32px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .results-count {
+    font-size: 13px;
+    color: var(--stone);
+    font-family: 'DM Mono', monospace;
+  }
+  .results-count strong { color: var(--forest); }
+  .view-toggle {
+    display: flex;
+    gap: 4px;
+  }
+  .view-btn {
+    padding: 5px 10px;
+    border: 1px solid var(--mist);
+    background: var(--white);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--stone);
+    transition: all .15s;
+  }
+  .view-btn.active { background: var(--forest); color: var(--white); border-color: var(--forest); }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 32px 64px;
+  }
+
+  /* ── CATEGORY SECTION ── */
+  .category-section {
+    margin-bottom: 40px;
+  }
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--mist);
+  }
+  .category-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--fern);
+    flex-shrink: 0;
+  }
+  .category-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--forest);
+    letter-spacing: 0.01em;
+  }
+  .category-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--stone);
+    background: var(--parchment);
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid var(--mist);
+    margin-left: auto;
+  }
+
+  /* ── PLANT GRID ── */
+  .plant-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+  .plant-grid.list-view {
+    grid-template-columns: 1fr;
+  }
+
+  /* ── PLANT CARD ── */
+  .plant-card {
+    background: var(--white);
+    border: 1.5px solid var(--mist);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color .2s, box-shadow .2s, transform .15s;
+  }
+  .plant-card:hover {
+    border-color: var(--sage);
+    box-shadow: 0 4px 20px rgba(28,58,43,.08);
+    transform: translateY(-1px);
+  }
+  .plant-card.open {
+    border-color: var(--fern);
+    box-shadow: 0 4px 24px rgba(28,58,43,.12);
+  }
+  .plant-card.invasive-card {
+    border-left: 4px solid var(--rust);
+  }
+
+  /* photo placeholder */
+  .card-photo {
+    height: 140px;
+    background: linear-gradient(135deg, var(--parchment) 0%, var(--mist) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .card-photo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234A7C59' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .photo-icon {
+    font-size: 32px;
+    opacity: .25;
+  }
+  .photo-label {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--stone);
+    background: rgba(255,255,255,.8);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .list-view .card-photo {
+    height: 80px;
+    width: 120px;
+    flex-shrink: 0;
+  }
+  .list-view .plant-card {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .card-body {
+    padding: 14px 16px 16px;
+    flex: 1;
+  }
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .plant-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--forest);
+    line-height: 1.3;
+  }
+  .plant-sci {
+    font-size: 11px;
+    color: var(--stone);
+    font-style: italic;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    margin-top: 2px;
+  }
+  .chevron {
+    color: var(--fog);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 3px;
+    transition: transform .2s;
+  }
+  .plant-card.open .chevron { transform: rotate(180deg); color: var(--fern); }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 2px;
+  }
+  .tag {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 10px;
+    white-space: nowrap;
+    letter-spacing: .02em;
+  }
+  .tag-native    { background: var(--tag-native-bg);    color: var(--tag-native-fg); }
+  .tag-bnn       { background: var(--tag-bnn-bg);       color: var(--tag-bnn-fg); }
+  .tag-invasive  { background: var(--tag-invasive-bg);  color: var(--tag-invasive-fg); }
+  .tag-edible    { background: var(--tag-edible-bg);    color: var(--tag-edible-fg); }
+  .tag-toxic     { background: var(--tag-toxic-bg);     color: var(--tag-toxic-fg); }
+  .tag-petsafe   { background: var(--tag-petsafe-bg);   color: var(--tag-petsafe-fg); }
+  .tag-petcaution{ background: var(--tag-petcaution-bg);color: var(--tag-petcaution-fg); }
+  .tag-pettox    { background: var(--tag-pettox-bg);    color: var(--tag-pettox-fg); }
+  .tag-wildlife  { background: var(--tag-wild-bg);      color: var(--tag-wild-fg); }
+  .tag-neutral   { background: var(--parchment);        color: var(--charcoal); border: 1px solid var(--mist); }
+
+  /* ── EXPANDED DETAIL ── */
+  .card-detail {
+    display: none;
+    padding: 0 16px 16px;
+    border-top: 1px solid var(--parchment);
+    margin-top: 4px;
+  }
+  .plant-card.open .card-detail { display: block; }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .detail-item .dl {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--stone);
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  .detail-item .dv {
+    font-size: 13px;
+    color: var(--charcoal);
+    font-weight: 400;
+  }
+
+  .desc-text {
+    font-size: 13px;
+    color: var(--charcoal);
+    line-height: 1.7;
+    padding-top: 12px;
+    border-top: 1px solid var(--parchment);
+    margin-top: 4px;
+  }
+
+  .warn-box {
+    background: #FFF8E6;
+    border: 1px solid #E8C44A;
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 9px 12px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: #5C4000;
+    line-height: 1.5;
+  }
+  .warn-box.danger {
+    background: #FEF0EE;
+    border-color: #E8826A;
+    border-left-color: var(--rust);
+    color: #6B1A0D;
+  }
+
+  .varieties-box {
+    margin-top: 14px;
+    background: var(--parchment);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .varieties-title {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--forest);
+    margin-bottom: 10px;
+  }
+  .variety-item {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--mist);
+  }
+  .variety-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .variety-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--forest);
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    margin-bottom: 3px;
+  }
+  .variety-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 4px; }
+  .variety-tag {
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 8px;
+    background: var(--white);
+    border: 1px solid var(--mist);
+    color: var(--stone);
+  }
+  .variety-note { font-size: 12px; color: var(--charcoal); line-height: 1.5; }
+
+  .removal-box {
+    margin-top: 12px;
+    background: #FEF0EE;
+    border-radius: 8px;
+    padding: 12px 14px;
+    border-left: 3px solid var(--rust);
+  }
+  .removal-title {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--rust);
+    margin-bottom: 6px;
+  }
+  .removal-text { font-size: 12px; color: #5C2010; line-height: 1.6; }
+
+  .alt-box {
+    margin-top: 10px;
+    background: var(--tag-native-bg);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--tag-native-fg);
+    line-height: 1.5;
+  }
+  .alt-box strong { font-weight: 500; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 80px 24px;
+    color: var(--stone);
+  }
+  .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: .4; }
+  .empty-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--charcoal);
+    margin-bottom: 8px;
+  }
+  .empty-sub { font-size: 14px; }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    background: var(--forest);
+    color: var(--sage);
+    text-align: center;
+    padding: 32px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .site-footer strong { color: var(--gold); font-family: 'Playfair Display', serif; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--sage); border-radius: 3px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .header-inner { padding: 14px 16px; flex-wrap: wrap; }
+    .site-title { font-size: 18px; }
+    .header-meta { display: none; }
+    .filter-panel { padding: 16px; }
+    .filters-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .results-bar { padding: 12px 16px 0; }
+    .main { padding: 16px 16px 48px; }
+    .plant-grid { grid-template-columns: 1fr; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .list-view .card-photo { width: 90px; height: 70px; }
+  }
+  @media (max-width: 480px) {
+    .filters-grid { grid-template-columns: 1fr; }
+    .search-row { flex-direction: column; }
+    .clear-btn { width: 100%; text-align: center; }
+  }
+
+  /* ── LOADING ── */
+  .loading {
+    text-align: center;
+    padding: 80px 24px;
+    color: var(--stone);
+  }
+  .loading-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--mist);
+    border-top-color: var(--fern);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div>
+      <div class="site-title">Southwest Florida <span>Plant Guide</span></div>
+      <div class="header-meta">Lee · Collier · Charlotte · Hendry · Glades Counties</div>
+    </div>
+    <div class="plant-count-badge" id="header-count">Loading...</div>
+  </div>
+</header>
+
+<div class="filter-panel">
+  <div class="filter-panel-inner">
+    <div class="search-row">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" type="text" id="search" placeholder="Search by name, description, or keyword…" autocomplete="off">
+      </div>
+      <button class="clear-btn" id="clear-btn">Clear filters</button>
+    </div>
+    <div class="filters-grid">
+      <div class="filter-group">
+        <label>Category</label>
+        <select id="f-category">
+          <option value="">All categories</option>
+          <option value="trees">Trees</option>
+          <option value="palms">Palms</option>
+          <option value="fruit_trees">Fruit trees</option>
+          <option value="shrubs">Shrubs</option>
+          <option value="flowers">Flowers &amp; perennials</option>
+          <option value="ground_covers">Ground covers</option>
+          <option value="vines">Vines</option>
+          <option value="grasses">Grasses &amp; sedges</option>
+          <option value="aquatic">Aquatic plants</option>
+          <option value="epiphytes">Epiphytes</option>
+          <option value="succulents_cacti">Succulents &amp; cacti</option>
+          <option value="ferns">Ferns</option>
+          <option value="bulbs_tubers">Bulbs &amp; tubers</option>
+          <option value="weeds">Beneficial weeds</option>
+          <option value="invasive">Invasive plants</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Origin</label>
+        <select id="f-origin">
+          <option value="">All origins</option>
+          <option value="native">Native to SW Florida</option>
+          <option value="beneficial_non_native">Beneficial non-native</option>
+          <option value="invasive">Invasive — avoid/remove</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Wildlife value</label>
+        <select id="f-wildlife">
+          <option value="">Any wildlife value</option>
+          <option value="hummingbirds">Hummingbirds</option>
+          <option value="butterflies">Butterflies</option>
+          <option value="host_plant">Host plant</option>
+          <option value="bees">Bees &amp; pollinators</option>
+          <option value="bird_food">Bird food</option>
+          <option value="nesting">Nesting habitat</option>
+          <option value="mammals">Mammals</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Light needs</label>
+        <select id="f-light">
+          <option value="">Any light</option>
+          <option value="full_sun">Full sun</option>
+          <option value="partial_sun">Partial sun</option>
+          <option value="shade">Shade tolerant</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Water needs</label>
+        <select id="f-water">
+          <option value="">Any water needs</option>
+          <option value="drought_tolerant">Drought tolerant</option>
+          <option value="moderate">Moderate</option>
+          <option value="water_loving">Water loving</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Pet safety</label>
+        <select id="f-pet">
+          <option value="">Any pet safety</option>
+          <option value="pet_safe">Pet safe</option>
+          <option value="pet_caution">Use caution</option>
+          <option value="toxic_to_pets">Toxic to pets</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Edibility</label>
+        <select id="f-edible">
+          <option value="">Any edibility</option>
+          <option value="edible">Edible</option>
+          <option value="edible_cooked_only">Edible (cooked only)</option>
+          <option value="edible_partial">Edible (partial)</option>
+          <option value="non_edible">Non-edible</option>
+          <option value="toxic">Toxic</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Salt tolerance</label>
+        <select id="f-salt">
+          <option value="">Any salt tolerance</option>
+          <option value="high">High — coastal OK</option>
+          <option value="moderate">Moderate</option>
+          <option value="low">Low — inland only</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="results-bar">
+  <div class="results-count" id="results-count">Loading plants…</div>
+  <div class="view-toggle">
+    <button class="view-btn active" id="grid-view-btn" title="Grid view">⊞</button>
+    <button class="view-btn" id="list-view-btn" title="List view">☰</button>
+  </div>
+</div>
+
+<main class="main" id="main-content">
+  <div class="loading">
+    <div class="loading-spinner"></div>
+    <div>Loading plant database…</div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <strong>Southwest Florida Plant Guide</strong><br>
+  Covering Lee · Collier · Charlotte · Hendry · Glades Counties<br>
+  <small>267 plants across 15 categories · Native habitat, food garden, and invasive identification</small>
+</footer>
+
+<script>
+// ── DATA LOADING ──────────────────────────────────────────────────────────────
+let ALL_PLANTS = [];
+let currentView = 'grid';
+
+async function loadPlants() {
+  try {
+    const res = await fetch('./swfl_plants.json');
+    if (!res.ok) throw new Error('Failed to load plant data');
+    const data = await res.json();
+    ALL_PLANTS = data.plants;
+    document.getElementById('header-count').textContent = `${ALL_PLANTS.length} plants`;
+    renderAll();
+  } catch(e) {
+    document.getElementById('main-content').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🌿</div>
+        <div class="empty-title">Could not load plant database</div>
+        <div class="empty-sub">Make sure swfl_plants.json is in the same folder as this file.</div>
+      </div>`;
+  }
+}
+
+// ── FILTER LOGIC ──────────────────────────────────────────────────────────────
+function getFilters() {
+  return {
+    search:   document.getElementById('search').value.toLowerCase().trim(),
+    category: document.getElementById('f-category').value,
+    origin:   document.getElementById('f-origin').value,
+    wildlife: document.getElementById('f-wildlife').value,
+    light:    document.getElementById('f-light').value,
+    water:    document.getElementById('f-water').value,
+    pet:      document.getElementById('f-pet').value,
+    edible:   document.getElementById('f-edible').value,
+    salt:     document.getElementById('f-salt').value,
+  };
+}
+
+function matchesFilters(p, f) {
+  if (f.category && p.category !== f.category) return false;
+  if (f.origin && p.origin !== f.origin) return false;
+  if (f.wildlife && !(p.wildlife||[]).includes(f.wildlife)) return false;
+  if (f.light && !(p.light||[]).includes(f.light)) return false;
+  if (f.water && p.water_needs !== f.water) return false;
+  if (f.pet && p.pet_safety !== f.pet) return false;
+  if (f.edible && p.edibility !== f.edible) return false;
+  if (f.salt && p.salt_tolerance !== f.salt) return false;
+  if (f.search) {
+    const s = f.search;
+    const haystack = [
+      p.common_name, p.scientific_name, p.description,
+      p.category, p.subcategory, p.origin,
+      ...(p.wildlife||[]),
+      ...(p.warnings||[]),
+    ].join(' ').toLowerCase();
+    if (!haystack.includes(s)) return false;
+  }
+  return true;
+}
+
+// ── DISPLAY HELPERS ───────────────────────────────────────────────────────────
+const CATEGORY_LABELS = {
+  trees:'Trees', palms:'Palms', fruit_trees:'Fruit Trees',
+  shrubs:'Shrubs', flowers:'Flowers & Perennials', ground_covers:'Ground Covers',
+  vines:'Vines', grasses:'Grasses & Sedges', aquatic:'Aquatic Plants',
+  epiphytes:'Epiphytes', succulents_cacti:'Succulents & Cacti',
+  ferns:'Ferns', bulbs_tubers:'Bulbs & Tubers',
+  weeds:'Beneficial Weeds', invasive:'Invasive Plants'
+};
+const CATEGORY_ORDER = [
+  'trees','palms','fruit_trees','shrubs','flowers','ground_covers',
+  'vines','grasses','aquatic','epiphytes','succulents_cacti',
+  'ferns','bulbs_tubers','weeds','invasive'
+];
+
+function originTag(origin) {
+  if (origin === 'native') return '<span class="tag tag-native">Native</span>';
+  if (origin === 'beneficial_non_native') return '<span class="tag tag-bnn">Non-native</span>';
+  if (origin === 'invasive') return '<span class="tag tag-invasive">⚠ Invasive</span>';
+  return '';
+}
+function petTag(pet) {
+  if (pet === 'pet_safe') return '<span class="tag tag-petsafe">Pet safe</span>';
+  if (pet === 'pet_caution') return '<span class="tag tag-petcaution">Pet caution</span>';
+  if (pet === 'toxic_to_pets') return '<span class="tag tag-pettox">⚠ Toxic to pets</span>';
+  return '';
+}
+function edibleTag(e) {
+  const map = {
+    edible:'<span class="tag tag-edible">Edible</span>',
+    edible_cooked_only:'<span class="tag tag-edible">Edible (cooked only)</span>',
+    edible_partial:'<span class="tag tag-edible">Edible (partial)</span>',
+    caution:'<span class="tag tag-petcaution">Caution</span>',
+    toxic:'<span class="tag tag-toxic">Toxic</span>',
+  };
+  return map[e] || '';
+}
+function wildlifeTags(arr) {
+  if (!arr || !arr.length) return '';
+  const labels = {
+    hummingbirds:'Hummingbirds', butterflies:'Butterflies',
+    host_plant:'Host plant', bees:'Bees', bird_food:'Bird food',
+    nesting:'Nesting', mammals:'Mammals', fish_habitat:'Fish habitat',
+    habitat:'Micro-habitat'
+  };
+  return arr.map(w => `<span class="tag tag-wildlife">${labels[w]||w}</span>`).join('');
+}
+function lightLabel(arr) {
+  if (!arr) return '—';
+  return arr.map(l => ({full_sun:'Full sun',partial_sun:'Partial sun',shade:'Shade'}[l]||l)).join(', ');
+}
+function waterLabel(w) {
+  return {drought_tolerant:'Drought tolerant',moderate:'Moderate',water_loving:'Water loving'}[w]||w||'—';
+}
+function saltLabel(s) {
+  return {high:'High',moderate:'Moderate',low:'Low'}[s]||s||'—';
+}
+function growthLabel(g) {
+  return {slow:'Slow',moderate:'Moderate',fast:'Fast'}[g]||g||'—';
+}
+function sizeLabel(s) {
+  return {small:'Small',medium:'Medium',large:'Large'}[s]||s||'—';
+}
+
+// ── CARD BUILDER ──────────────────────────────────────────────────────────────
+function buildCard(p) {
+  const isInvasive = p.category === 'invasive' || p.origin === 'invasive';
+  const hasWarn = p.warnings && p.warnings.length && p.warnings.some(w=>w.length>0);
+  const isDanger = p.pet_safety === 'toxic_to_pets' || p.edibility === 'toxic';
+
+  const warnHtml = hasWarn ? p.warnings
+    .filter(w=>w.length>0)
+    .map(w => `<div class="warn-box${isDanger?' danger':''}">${isDanger?'⚠ ':'⚠ '}${w}</div>`)
+    .join('') : '';
+
+  const detailGrid = `
+    <div class="detail-grid">
+      <div class="detail-item"><div class="dl">Light</div><div class="dv">${lightLabel(p.light)}</div></div>
+      <div class="detail-item"><div class="dl">Water</div><div class="dv">${waterLabel(p.water_needs)}</div></div>
+      <div class="detail-item"><div class="dl">Salt tolerance</div><div class="dv">${saltLabel(p.salt_tolerance)}</div></div>
+      <div class="detail-item"><div class="dl">Growth rate</div><div class="dv">${growthLabel(p.growth_rate)}</div></div>
+      <div class="detail-item"><div class="dl">Mature size</div><div class="dv">${sizeLabel(p.mature_size)}</div></div>
+      ${p.bloom_season ? `<div class="detail-item"><div class="dl">Bloom season</div><div class="dv">${p.bloom_season}</div></div>` : ''}
+      ${p.harvest_season ? `<div class="detail-item"><div class="dl">Harvest season</div><div class="dv">${p.harvest_season}</div></div>` : ''}
+      ${p.water_zone ? `<div class="detail-item"><div class="dl">Water zone</div><div class="dv">${p.water_zone}</div></div>` : ''}
+      ${p.mount_method ? `<div class="detail-item"><div class="dl">How to mount</div><div class="dv">${p.mount_method}</div></div>` : ''}
+      ${p.traffic_tolerance ? `<div class="detail-item"><div class="dl">Foot traffic</div><div class="dv">${p.traffic_tolerance.replace(/_/g,' ')}</div></div>` : ''}
+    </div>`;
+
+  const varietiesHtml = p.varieties ? `
+    <div class="varieties-box">
+      <div class="varieties-title">Best varieties for SW Florida</div>
+      ${p.varieties.map(v=>`
+        <div class="variety-item">
+          <div class="variety-name">${v.name}</div>
+          <div class="variety-tags">${(v.tags||[]).map(t=>`<span class="variety-tag">${t}</span>`).join('')}</div>
+          <div class="variety-note">${v.notes||''}</div>
+        </div>`).join('')}
+    </div>` : '';
+
+  const removalHtml = p.removal_method ? `
+    <div class="removal-box">
+      <div class="removal-title">Removal method</div>
+      <div class="removal-text">${p.removal_method}</div>
+    </div>` : '';
+
+  const altHtml = p.native_alternatives && p.native_alternatives.length ? `
+    <div class="alt-box">
+      <strong>✓ Native alternatives:</strong> ${p.native_alternatives.join(', ')}
+    </div>` : '';
+
+  const managementHtml = p.management ? `
+    <div class="warn-box">
+      <strong>Management:</strong> ${p.management}
+    </div>` : '';
+
+  return `
+    <div class="plant-card${isInvasive?' invasive-card':''}" data-id="${p.id}">
+      <div class="card-photo">
+        <span class="photo-icon">🌿</span>
+        <span class="photo-label">Photo coming soon</span>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div>
+            <div class="plant-name">${p.common_name}</div>
+            <div class="plant-sci">${p.scientific_name}</div>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="tag-row">
+          ${originTag(p.origin)}
+          ${edibleTag(p.edibility)}
+          ${petTag(p.pet_safety)}
+          ${wildlifeTags(p.wildlife)}
+        </div>
+        <div class="card-detail">
+          ${warnHtml}
+          ${detailGrid}
+          <div class="desc-text">${p.description||''}</div>
+          ${managementHtml}
+          ${varietiesHtml}
+          ${removalHtml}
+          ${altHtml}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function renderAll() {
+  const f = getFilters();
+  const filtered = ALL_PLANTS.filter(p => matchesFilters(p, f));
+
+  document.getElementById('results-count').innerHTML =
+    `Showing <strong>${filtered.length}</strong> of ${ALL_PLANTS.length} plants`;
+
+  const main = document.getElementById('main-content');
+
+  if (!filtered.length) {
+    main.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <div class="empty-title">No plants found</div>
+        <div class="empty-sub">Try adjusting your filters or search term.</div>
+      </div>`;
+    return;
+  }
+
+  // Group by category
+  const grouped = {};
+  for (const p of filtered) {
+    if (!grouped[p.category]) grouped[p.category] = [];
+    grouped[p.category].push(p);
+  }
+
+  let html = '';
+  for (const cat of CATEGORY_ORDER) {
+    if (!grouped[cat]) continue;
+    const plants = grouped[cat];
+    html += `
+      <section class="category-section">
+        <div class="category-header">
+          <div class="category-dot"></div>
+          <h2 class="category-name">${CATEGORY_LABELS[cat]||cat}</h2>
+          <span class="category-count">${plants.length}</span>
+        </div>
+        <div class="plant-grid${currentView==='list'?' list-view':''}" id="grid-${cat}">
+          ${plants.map(buildCard).join('')}
+        </div>
+      </section>`;
+  }
+
+  main.innerHTML = html;
+
+  // Card click handlers
+  main.querySelectorAll('.plant-card').forEach(card => {
+    card.addEventListener('click', () => card.classList.toggle('open'));
+  });
+}
+
+// ── CONTROLS ─────────────────────────────────────────────────────────────────
+let debounceTimer;
+function debounce(fn, ms) {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(fn, ms);
+}
+
+document.getElementById('search').addEventListener('input', () => debounce(renderAll, 250));
+['f-category','f-origin','f-wildlife','f-light','f-water','f-pet','f-edible','f-salt']
+  .forEach(id => document.getElementById(id).addEventListener('change', renderAll));
+
+document.getElementById('clear-btn').addEventListener('click', () => {
+  document.getElementById('search').value = '';
+  ['f-category','f-origin','f-wildlife','f-light','f-water','f-pet','f-edible','f-salt']
+    .forEach(id => { document.getElementById(id).value = ''; });
+  renderAll();
+});
+
+document.getElementById('grid-view-btn').addEventListener('click', () => {
+  currentView = 'grid';
+  document.getElementById('grid-view-btn').classList.add('active');
+  document.getElementById('list-view-btn').classList.remove('active');
+  document.querySelectorAll('.plant-grid').forEach(g => g.classList.remove('list-view'));
+});
+document.getElementById('list-view-btn').addEventListener('click', () => {
+  currentView = 'list';
+  document.getElementById('list-view-btn').classList.add('active');
+  document.getElementById('grid-view-btn').classList.remove('active');
+  document.querySelectorAll('.plant-grid').forEach(g => g.classList.add('list-view'));
+});
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+loadPlants();
+</script>
+</body>
+</html>
